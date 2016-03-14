@@ -47,7 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\FireScript.cs" />
-     <Compile Include="Assets\Scripts\FollowReticule.cs" />
+     <Compile Include="Assets\Scripts\FollowShip.cs" />
      <Compile Include="Assets\Scripts\Global.cs" />
      <Compile Include="Assets\Scripts\ProjectileScript.cs" />
      <Compile Include="Assets\Scripts\ReticuleScript.cs" />

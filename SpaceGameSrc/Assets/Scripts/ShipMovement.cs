@@ -2,6 +2,13 @@
 using System.Collections;
 
 public class ShipMovement : MonoBehaviour {
+	public float ShipSpeed = 25f;
+
+	public float SpeedDamp = 5f;
+
+	public float Speed1Multiplier = 0.5f;
+	public float Speed2Multiplier = 1.0f;
+	public float Speed3Multiplier = 2.0f;
 
 	public float TurnSpeedH = 150f;
 	public float TurnSpeedV = 120f;
@@ -20,6 +27,14 @@ public class ShipMovement : MonoBehaviour {
 
 	private float HAngle = 0;
 	private float VAngle = 0;
+
+	private float CurSpeed = 0;
+
+	private int SpeedMode = 2;
+
+	void Start() {
+		CurSpeed = ShipSpeed;
+	}
 
 	// Update is called once per frame
 	void Update () {
@@ -50,6 +65,35 @@ public class ShipMovement : MonoBehaviour {
 		transform.localEulerAngles = new Vector3(0, HAngle, VAngle);
 		transform.Rotate(270, 0, 0);
 
-		transform.Translate(-Global.Speed * Time.deltaTime, 0, 0);
+		if(Input.GetButtonDown("Speed Up")) {
+			if(SpeedMode < 3)
+				SpeedMode++;
+		}
+		else if(Input.GetButtonDown("Speed Down")) {
+			if(SpeedMode > 1)
+				SpeedMode--;
+		}
+
+		float SpeedMult = 0f;
+
+		switch (SpeedMode) {
+			case 1:
+				SpeedMult = Speed1Multiplier;
+				break;
+			case 2:
+				SpeedMult = Speed2Multiplier;
+				break;
+			case 3:
+				SpeedMult = Speed3Multiplier;
+				break;
+		}
+
+		CurSpeed = Mathf.Lerp (CurSpeed, ShipSpeed * SpeedMult, Time.deltaTime * SpeedDamp);
+
+		transform.Translate(-CurSpeed * SpeedMult * Time.deltaTime, 0, 0);
+	}
+
+	public float GetSpeed() {
+		return CurSpeed;
 	}
 }
