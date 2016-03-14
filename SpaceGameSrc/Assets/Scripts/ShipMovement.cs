@@ -6,6 +6,9 @@ public class ShipMovement : MonoBehaviour {
 	public float TurnSpeedH = 150f;
 	public float TurnSpeedV = 120f;
 
+	public float TurnDampH = 5f;
+	public float TurnDampV = 5f;
+
 	public float TurnMaxH = 50f;
 	public float TurnMaxV = 30f;
 
@@ -21,18 +24,25 @@ public class ShipMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		HAngle += Input.GetAxis("Horizontal") * Time.deltaTime * TurnSpeedH;
-		VAngle += -Input.GetAxis("Vertical") * Time.deltaTime * TurnSpeedV;
+		//HAngle += Input.GetAxis("Horizontal") * Time.deltaTime * TurnSpeedH;
+		//VAngle += -Input.GetAxis("Vertical") * Time.deltaTime * TurnSpeedV;
 
-		if(Input.GetAxisRaw("Horizontal") == 0) {
-			HAngle = Mathf.Lerp(HAngle, ReleaseMinH, Time.deltaTime*ReleaseDampH);
+		if (Input.GetAxisRaw ("Horizontal") == 0) {
+			HAngle = Mathf.Lerp (HAngle, ReleaseMinH, Time.deltaTime * ReleaseDampH);
+		} 
+		else {
+			HAngle = Mathf.Lerp (HAngle, Input.GetAxis ("Horizontal") * TurnMaxH, Time.deltaTime * TurnDampH);  
 		}
+
 		if(Input.GetAxisRaw("Vertical") == 0) {
 			VAngle = Mathf.Lerp(VAngle, ReleaseMinV, Time.deltaTime*ReleaseDampV);
 		}
+		else {
+			VAngle = Mathf.Lerp (VAngle, -Input.GetAxis ("Vertical") * TurnMaxV, Time.deltaTime * TurnDampV);  
+		}
 
-		HAngle = Mathf.Clamp(HAngle, -TurnMaxH, TurnMaxH);
-		VAngle = Mathf.Clamp(VAngle, -TurnMaxV, TurnMaxV);
+		//HAngle = Mathf.Clamp(HAngle, -TurnMaxH, TurnMaxH);
+		//VAngle = Mathf.Clamp(VAngle, -TurnMaxV, TurnMaxV);
 
 		Debug.Log("HAngle: " + HAngle);
 		Debug.Log("VAngle: " + VAngle);
