@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class UIScript : MonoBehaviour {
 	public Text ScoreText;
 	public Text HealthText;
+	public Text SpeedText;
 	public Dropdown AAMenu;
 	public GameObject PausePanel;
 	public GameObject HUDPanel;
@@ -17,6 +18,10 @@ public class UIScript : MonoBehaviour {
 	void Update () {
 		ScoreText.text = "Score: "+Global.Score;
 		HealthText.text = "Health: "+Global.Health;
+		ShipMovement Movement = GameObject.FindGameObjectWithTag ("Player").GetComponent<ShipMovement> ();
+		if (Movement) {
+			SpeedText.text = "Speed: " + Movement.GetSpeedMode ();
+		}
 		switch(AAMenu.value) {
 			case 0:
 				QualitySettings.antiAliasing = 0;
@@ -31,7 +36,7 @@ public class UIScript : MonoBehaviour {
 				QualitySettings.antiAliasing = 8;
 				break;
 		}
-		if(Input.GetKeyDown(KeyCode.Escape)) {
+		if(Input.GetButtonDown("Pause")) {
 			HUDPanel.SetActive(!HUDPanel.activeInHierarchy);
 			PausePanel.SetActive(!PausePanel.activeInHierarchy);
 			if(Time.timeScale == 1F) {

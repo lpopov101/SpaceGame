@@ -96,4 +96,15 @@ public class ShipMovement : MonoBehaviour {
 	public float GetSpeed() {
 		return CurSpeed;
 	}
+	public string GetSpeedMode() {
+		switch (SpeedMode) {
+			case 1:
+				return "Slow";
+			case 2:
+				return "Normal";
+			case 3:
+				return "Fast";
+		}
+		return "Invalid";
+	}
 }
