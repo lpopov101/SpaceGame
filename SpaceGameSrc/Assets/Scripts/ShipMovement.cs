@@ -25,12 +25,22 @@ public class ShipMovement : MonoBehaviour {
 	public float ReleaseDampH = 5f;
 	public float ReleaseDampV = 5f;
 
+	public float RollStrength = 100f;
+	public float RollTime = 2f;
+	public float RollEffectStrength = 300f;
+
 	private float HAngle = 0;
 	private float VAngle = 0;
 
 	private float CurSpeed = 0;
 
 	private int SpeedMode = 2;
+
+	private float CurRoll = 0;
+
+	private float TimeRollStarted = 0;
+
+	private float RollTrack = 0;
 
 	void Start() {
 		CurSpeed = ShipSpeed;
@@ -55,15 +65,32 @@ public class ShipMovement : MonoBehaviour {
 		else {
 			VAngle = Mathf.Lerp (VAngle, -Input.GetAxis ("Vertical") * TurnMaxV, Time.deltaTime * TurnDampV);  
 		}
+		if (Input.GetAxis ("Roll") > 0 && TimeRollStarted == 0) {
+			CurRoll = RollStrength;
+			TimeRollStarted = Time.time;
+			RollTrack = 0;
+		} 
+		else if (Input.GetAxis ("Roll") < 0 && TimeRollStarted == 0) {
+			CurRoll = -RollStrength;
+			TimeRollStarted = Time.time;
+			RollTrack = 0;
+		}
 
 		//HAngle = Mathf.Clamp(HAngle, -TurnMaxH, TurnMaxH);
 		//VAngle = Mathf.Clamp(VAngle, -TurnMaxV, TurnMaxV);
 
 		Debug.Log("HAngle: " + HAngle);
 		Debug.Log("VAngle: " + VAngle);
-		
-		transform.localEulerAngles = new Vector3(0, HAngle, VAngle);
-		transform.Rotate(270, 0, 0);
+
+
+		transform.localEulerAngles = new Vector3 (0, HAngle, VAngle);
+		if (TimeRollStarted == 0) {
+			transform.Rotate(270, 0, 0);
+		} 
+		else {
+			RollTrack += RollEffectStrength * Time.deltaTime;
+			transform.Rotate (RollTrack * Mathf.Abs(CurRoll)/CurRoll, 0, 0);
+		}
 
 		if(Input.GetButtonDown("Speed Up")) {
 			if(SpeedMode < 3)
@@ -90,7 +117,15 @@ public class ShipMovement : MonoBehaviour {
 
 		CurSpeed = Mathf.Lerp (CurSpeed, ShipSpeed * SpeedMult, Time.deltaTime * SpeedDamp);
 
-		transform.Translate(-CurSpeed * SpeedMult * Time.deltaTime, 0, 0);
+		transform.Translate (-CurSpeed * SpeedMult * Time.deltaTime, 0, 0);
+
+		transform.Translate (0, 0, CurRoll * Time.deltaTime, Space.World);
+		
+		if (Time.time - TimeRollStarted > RollTime) {
+			TimeRollStarted = 0;
+			CurRoll = 0;
+			RollTrack = 0;
+		}
 	}
 
 	public float GetSpeed() {
