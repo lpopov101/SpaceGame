@@ -14,7 +14,7 @@ public class FireScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown ("Jump")) {
+		if (Input.GetButtonDown ("Fire")) {
 			if(whichOne)
 				Instantiate (rocket, firePoint1.position, firePoint1.rotation);
 			else

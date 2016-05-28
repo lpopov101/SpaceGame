@@ -9,6 +9,7 @@ public class UIScript : MonoBehaviour {
 	public Dropdown AAMenu;
 	public GameObject PausePanel;
 	public GameObject HUDPanel;
+	public MonoBehaviour CameraBlur;
 
 	void Start() {
 		HUDPanel.SetActive(true);
@@ -40,9 +41,11 @@ public class UIScript : MonoBehaviour {
 			HUDPanel.SetActive(!HUDPanel.activeInHierarchy);
 			PausePanel.SetActive(!PausePanel.activeInHierarchy);
 			if(Time.timeScale == 1F) {
+				CameraBlur.enabled = true;
 				Time.timeScale = 0F;
 			}
 			else if(Time.timeScale == 0F) {
+				CameraBlur.enabled = false;
 				Time.timeScale = 1F;
 			}
 		}

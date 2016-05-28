@@ -27,6 +27,7 @@ public class ShipMovement : MonoBehaviour {
 
 	public float RollStrength = 100f;
 	public float RollTime = 2f;
+    public float RollCharge = 5f;
 	public float RollEffectStrength = 300f;
 
 	private float HAngle = 0;
@@ -39,6 +40,7 @@ public class ShipMovement : MonoBehaviour {
 	private float CurRoll = 0;
 
 	private float TimeRollStarted = 0;
+    private float TimeRollEnded = 0;
 
 	private float RollTrack = 0;
 
@@ -65,16 +67,20 @@ public class ShipMovement : MonoBehaviour {
 		else {
 			VAngle = Mathf.Lerp (VAngle, -Input.GetAxis ("Vertical") * TurnMaxV, Time.deltaTime * TurnDampV);  
 		}
-		if (Input.GetAxis ("Roll") > 0 && TimeRollStarted == 0) {
-			CurRoll = RollStrength;
-			TimeRollStarted = Time.time;
-			RollTrack = 0;
-		} 
-		else if (Input.GetAxis ("Roll") < 0 && TimeRollStarted == 0) {
-			CurRoll = -RollStrength;
-			TimeRollStarted = Time.time;
-			RollTrack = 0;
-		}
+        if (Time.time - TimeRollEnded >= RollCharge || TimeRollEnded == 0) {
+            if (Input.GetAxis("Roll") > 0 && TimeRollStarted == 0)
+            {
+                CurRoll = RollStrength;
+                TimeRollStarted = Time.time;
+                RollTrack = 0;
+            }
+            else if (Input.GetAxis("Roll") < 0 && TimeRollStarted == 0)
+            {
+                CurRoll = -RollStrength;
+                TimeRollStarted = Time.time;
+                RollTrack = 0;
+            }
+        }
 
 		//HAngle = Mathf.Clamp(HAngle, -TurnMaxH, TurnMaxH);
 		//VAngle = Mathf.Clamp(VAngle, -TurnMaxV, TurnMaxV);
@@ -92,11 +98,11 @@ public class ShipMovement : MonoBehaviour {
 			transform.Rotate (RollTrack * Mathf.Abs(CurRoll)/CurRoll, 0, 0);
 		}
 
-		if(Input.GetButtonDown("Speed Up")) {
+		if(Input.GetAxisRaw("Speed") > 0) {
 			if(SpeedMode < 3)
 				SpeedMode++;
 		}
-		else if(Input.GetButtonDown("Speed Down")) {
+		else if(Input.GetAxisRaw("Speed") < 0) {
 			if(SpeedMode > 1)
 				SpeedMode--;
 		}
@@ -121,10 +127,11 @@ public class ShipMovement : MonoBehaviour {
 
 		transform.Translate (0, 0, CurRoll * Time.deltaTime, Space.World);
 		
-		if (Time.time - TimeRollStarted > RollTime) {
+		if (Time.time - TimeRollStarted > RollTime && TimeRollStarted != 0) {
 			TimeRollStarted = 0;
 			CurRoll = 0;
 			RollTrack = 0;
+            TimeRollEnded = Time.time;
 		}
 	}
 
