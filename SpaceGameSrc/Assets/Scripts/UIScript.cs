@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.VR;
 
 public class UIScript : MonoBehaviour {
 	public Text ScoreText;
@@ -17,7 +18,12 @@ public class UIScript : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		ScoreText.text = "Score: "+Global.Score;
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            VRSettings.enabled = !VRSettings.enabled;
+            Debug.Log("Changed VRSettings.enabled to:" + VRSettings.enabled);
+        }
+        ScoreText.text = "Score: "+Global.Score;
 		HealthText.text = "Health: "+Global.Health;
 		ShipMovement Movement = GameObject.FindGameObjectWithTag ("Player").GetComponent<ShipMovement> ();
 		if (Movement) {

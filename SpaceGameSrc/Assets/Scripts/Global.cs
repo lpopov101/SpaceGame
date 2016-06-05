@@ -7,6 +7,8 @@ public class Global {
 	public static int Health = 100;
 
 	public static void endGame() {
+        Score = 0;
+        Health = 100;
 		SceneManager.LoadScene (0);
 	}
 }

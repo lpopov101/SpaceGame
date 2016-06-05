@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class ProjectileScript : MonoBehaviour {
+    public float speed = 15;
+
 	private Transform player;
 	private Vector3 v;
 
@@ -13,6 +15,6 @@ public class ProjectileScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Translate (v * Time.deltaTime * 15);
+		transform.Translate (v * Time.deltaTime * speed);
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.VR;
 using System.Collections;
 
 public class ReticuleScript : MonoBehaviour {
@@ -10,7 +11,9 @@ public class ReticuleScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.LookAt(Camera);
-		transform.Rotate (270, 0, 0);
+        if(!VRSettings.enabled) { 
+		    transform.LookAt(Camera);
+		    transform.Rotate (270, 0, 0);
+        }
 	}
 }
